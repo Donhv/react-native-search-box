@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import {
   Text,
   TouchableWithoutFeedback,
@@ -11,7 +11,7 @@ import {
   Image,
   View,
   ViewPropTypes
-} from 'react-native';
+} from "react-native";
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 const containerHeight = 40;
@@ -22,9 +22,9 @@ class Search extends PureComponent {
 
     this.state = {
       keyword: props.defaultValue,
-      expanded: false,
+      expanded: false
     };
-    const { width } = Dimensions.get('window');
+    const { width } = Dimensions.get("window");
     this.contentWidth = width;
     this.middleWidth = width / 2;
     this.cancelButtonWidth = this.props.cancelButtonWidth || 70;
@@ -58,9 +58,9 @@ class Search extends PureComponent {
     /**
      * local variables
      */
-    this.placeholder = this.props.placeholder || 'Search';
-    this.cancelTitle = this.props.cancelTitle || 'Cancel';
-    this.autoFocus =  this.props.autoFocus || false;
+    this.placeholder = this.props.placeholder || "Search";
+    this.cancelTitle = this.props.cancelTitle || "Cancel";
+    this.autoFocus = this.props.autoFocus || false;
 
     /**
      * Shadow
@@ -72,10 +72,9 @@ class Search extends PureComponent {
   }
 
   componentDidMount() {
-    if(this.autoFocus) {
-      this.setState({expanded: true})
-      this.refs.input_keyword._component.focus();
-
+    if (this.autoFocus) {
+      this.setState({ expanded: true });
+      this.refs.input_keyword.focus();
     }
   }
 
@@ -114,7 +113,8 @@ class Search extends PureComponent {
     await new Promise((resolve, reject) => {
       Animated.timing(this.iconDeleteAnimated, {
         toValue: text.length > 0 ? 1 : 0,
-        duration: 200
+        duration: 200,
+        useNativeDriver: false
       }).start(() => resolve());
     });
     this.props.onChangeText &&
@@ -127,8 +127,7 @@ class Search extends PureComponent {
    */
   onFocus = async () => {
     this.props.beforeFocus && (await this.props.beforeFocus());
-    this.refs.input_keyword._component.isFocused &&
-      (await this.refs.input_keyword._component.focus());
+    this.input_keyword.isFocused && (await this.input_keyword.focus());
     await this.setState(prevState => {
       return { expanded: !prevState.expanded };
     });
@@ -141,9 +140,9 @@ class Search extends PureComponent {
    * focus
    * async await
    */
-  focus = async (text = '') => {
+  focus = async (text = "") => {
     await this.setState({ keyword: text });
-    await this.refs.input_keyword._component.focus();
+    await this.input_keyword.focus();
   };
 
   /**
@@ -155,10 +154,11 @@ class Search extends PureComponent {
     await new Promise((resolve, reject) => {
       Animated.timing(this.iconDeleteAnimated, {
         toValue: 0,
-        duration: 200
+        duration: 200,
+        useNativeDriver: false
       }).start(() => resolve());
     });
-    await this.setState({ keyword: '' });
+    await this.setState({ keyword: "" });
     this.props.onDelete && (await this.props.onDelete());
     this.props.afterDelete && (await this.props.afterDelete());
   };
@@ -169,7 +169,7 @@ class Search extends PureComponent {
    */
   onCancel = async () => {
     this.props.beforeCancel && (await this.props.beforeCancel());
-    await this.setState({ keyword: '' });
+    await this.setState({ keyword: "" });
     await this.setState(prevState => {
       return { expanded: !prevState.expanded };
     });
@@ -183,27 +183,33 @@ class Search extends PureComponent {
       Animated.parallel([
         Animated.timing(this.inputFocusWidthAnimated, {
           toValue: this.contentWidth - this.cancelButtonWidth,
-          duration: 200
+          duration: 200,
+          useNativeDriver: false
         }).start(),
         Animated.timing(this.btnCancelAnimated, {
           toValue: 10,
-          duration: 200
+          duration: 200,
+          useNativeDriver: false
         }).start(),
         Animated.timing(this.inputFocusPlaceholderAnimated, {
           toValue: this.props.placeholderExpandedMargin,
-          duration: 200
+          duration: 200,
+          useNativeDriver: false
         }).start(),
         Animated.timing(this.iconSearchAnimated, {
           toValue: this.props.searchIconExpandedMargin,
-          duration: 200
+          duration: 200,
+          useNativeDriver: false
         }).start(),
         Animated.timing(this.iconDeleteAnimated, {
           toValue: this.state.keyword.length > 0 ? 1 : 0,
-          duration: 200
+          duration: 200,
+          useNativeDriver: false
         }).start(),
         Animated.timing(this.shadowOpacityAnimated, {
           toValue: this.props.shadowOpacityExpanded,
-          duration: 200
+          duration: 200,
+          useNativeDriver: false
         }).start()
       ]);
       this.shadowHeight = this.props.shadowOffsetHeightExpanded;
@@ -217,31 +223,37 @@ class Search extends PureComponent {
         this.props.keyboardShouldPersist === false ? Keyboard.dismiss() : null,
         Animated.timing(this.inputFocusWidthAnimated, {
           toValue: this.contentWidth - 10,
-          duration: 200
+          duration: 200,
+          useNativeDriver: false
         }).start(),
         Animated.timing(this.btnCancelAnimated, {
           toValue: this.contentWidth,
-          duration: 200
+          duration: 200,
+          useNativeDriver: false
         }).start(),
         this.props.keyboardShouldPersist === false
           ? Animated.timing(this.inputFocusPlaceholderAnimated, {
               toValue: this.middleWidth - this.props.placeholderCollapsedMargin,
-              duration: 200
+              duration: 200,
+              useNativeDriver: false
             }).start()
           : null,
         this.props.keyboardShouldPersist === false || isForceAnim === true
           ? Animated.timing(this.iconSearchAnimated, {
               toValue: this.middleWidth - this.props.searchIconCollapsedMargin,
-              duration: 200
+              duration: 200,
+              useNativeDriver: false
             }).start()
           : null,
         Animated.timing(this.iconDeleteAnimated, {
           toValue: 0,
-          duration: 200
+          duration: 200,
+          useNativeDriver: false
         }).start(),
         Animated.timing(this.shadowOpacityAnimated, {
           toValue: this.props.shadowOpacityCollapsed,
-          duration: 200
+          duration: 200,
+          useNativeDriver: false
         }).start()
       ]);
       this.shadowHeight = this.props.shadowOffsetHeightCollapsed;
@@ -250,7 +262,7 @@ class Search extends PureComponent {
   };
 
   render() {
-    const isRtl = this.props.direction === 'rtl';
+    const isRtl = this.props.direction === "rtl";
     const styles = getStyles(this.props.inputHeight, isRtl);
     return (
       <Animated.View
@@ -264,7 +276,7 @@ class Search extends PureComponent {
         onLayout={this.onLayout}
       >
         <AnimatedTextInput
-          ref="input_keyword"
+          ref={ref => (this.input_keyword = ref)}
           style={[
             styles.input,
             this.props.placeholderTextColor && {
@@ -277,7 +289,8 @@ class Search extends PureComponent {
             },
             {
               width: this.inputFocusWidthAnimated,
-              [isRtl ? 'paddingRight' : 'paddingLeft']: this.inputFocusPlaceholderAnimated
+              [isRtl ? "paddingRight" : "paddingLeft"]: this
+                .inputFocusPlaceholderAnimated
             },
             this.props.shadowVisible && {
               shadowOffset: {
@@ -300,23 +313,23 @@ class Search extends PureComponent {
           onSubmitEditing={this.onSearch}
           autoCorrect={false}
           blurOnSubmit={this.props.blurOnSubmit}
-          returnKeyType={this.props.returnKeyType || 'search'}
-          keyboardType={this.props.keyboardType || 'default'}
-          keyboardAppearance={this.props.keyboardAppearance || 'default'}
+          returnKeyType={this.props.returnKeyType || "search"}
+          keyboardType={this.props.keyboardType || "default"}
           autoCapitalize={this.props.autoCapitalize}
           onFocus={this.onFocus}
           underlineColorAndroid="transparent"
           accessibilityTraits="search"
         />
         <TouchableWithoutFeedback onPress={this.onFocus}>
-        {this.props.iconSearch
-          ? <Animated.View
+          {this.props.iconSearch ? (
+            <Animated.View
               style={[styles.iconSearch, { left: this.iconSearchAnimated }]}
             >
               {this.props.iconSearch}
             </Animated.View>
-          : <Animated.Image
-              source={require('./img/search.png')}
+          ) : (
+            <Animated.Image
+              source={require("./img/search.png")}
               style={[
                 styles.iconSearch,
                 styles.iconSearchDefault,
@@ -327,23 +340,26 @@ class Search extends PureComponent {
                   left: this.iconSearchAnimated
                 }
               ]}
-            />}
-          </TouchableWithoutFeedback>
-        {this.props.useClearButton && <TouchableWithoutFeedback onPress={this.onDelete}>
-          {this.props.iconDelete
-            ? <Animated.View
+            />
+          )}
+        </TouchableWithoutFeedback>
+        {this.props.useClearButton && (
+          <TouchableWithoutFeedback onPress={this.onDelete}>
+            {this.props.iconDelete ? (
+              <Animated.View
                 style={[
                   styles.iconDelete,
                   this.props.positionRightDelete && {
-                    [isRtl ? 'left' : 'right']: this.props.positionRightDelete
+                    [isRtl ? "left" : "right"]: this.props.positionRightDelete
                   },
                   { opacity: this.iconDeleteAnimated }
                 ]}
               >
                 {this.props.iconDelete}
               </Animated.View>
-            : <Animated.Image
-                source={require('./img/delete.png')}
+            ) : (
+              <Animated.Image
+                source={require("./img/delete.png")}
                 style={[
                   styles.iconDelete,
                   styles.iconDeleteDefault,
@@ -351,20 +367,23 @@ class Search extends PureComponent {
                     tintColor: this.props.tintColorDelete
                   },
                   this.props.positionRightDelete && {
-                    [isRtl ? 'left' : 'right']: this.props.positionRightDelete
+                    [isRtl ? "left" : "right"]: this.props.positionRightDelete
                   },
                   { opacity: this.iconDeleteAnimated }
                 ]}
-              />}
-        </TouchableWithoutFeedback>}
+              />
+            )}
+          </TouchableWithoutFeedback>
+        )}
 
         <TouchableOpacity onPress={this.onCancel}>
           <Animated.View
             style={[
               styles.cancelButton,
               this.props.cancelButtonStyle && this.props.cancelButtonStyle,
-              this.props.cancelButtonViewStyle && this.props.cancelButtonViewStyle,
-              { [isRtl ? 'right' : 'left']: this.btnCancelAnimated },
+              this.props.cancelButtonViewStyle &&
+                this.props.cancelButtonViewStyle,
+              { [isRtl ? "right" : "left"]: this.btnCancelAnimated }
             ]}
           >
             <Text
@@ -374,7 +393,8 @@ class Search extends PureComponent {
                   color: this.props.titleCancelColor
                 },
                 this.props.cancelButtonStyle && this.props.cancelButtonStyle,
-                this.props.cancelButtonTextStyle && this.props.cancelButtonTextStyle,
+                this.props.cancelButtonTextStyle &&
+                  this.props.cancelButtonTextStyle
               ]}
             >
               {this.cancelTitle}
@@ -387,64 +407,63 @@ class Search extends PureComponent {
 }
 
 const getStyles = (inputHeight, isRtl) => {
-  let middleHeight = 20
-  if (typeof inputHeight == 'number')
-  middleHeight = (10 + inputHeight) / 2;
+  let middleHeight = 20;
+  if (typeof inputHeight == "number") middleHeight = (10 + inputHeight) / 2;
 
   return {
     container: {
-      backgroundColor: 'grey',
+      backgroundColor: "grey",
       height: containerHeight,
-      flexDirection: isRtl ? 'row-reverse' : 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
+      flexDirection: isRtl ? "row-reverse" : "row",
+      justifyContent: "flex-start",
+      alignItems: "center",
       padding: 5
     },
     input: {
       height: containerHeight - 10,
       paddingTop: 5,
       paddingBottom: 5,
-      [isRtl ? 'paddingRight' : 'paddingLeft']: 20,
-      textAlign: isRtl ? 'right' : 'left',
-      borderColor: '#444',
-      backgroundColor: '#f7f7f7',
+      [isRtl ? "paddingRight" : "paddingLeft"]: 20,
+      textAlign: isRtl ? "right" : "left",
+      borderColor: "#444",
+      backgroundColor: "#f7f7f7",
       borderRadius: 5,
       fontSize: 13
     },
-    placeholderColor: 'grey',
+    placeholderColor: "grey",
     iconSearch: {
       flex: 1,
-      position: 'absolute',
+      position: "absolute",
       top: middleHeight - 7,
       height: 14,
       width: 14
     },
     iconSearchDefault: {
-      tintColor: 'grey'
+      tintColor: "grey"
     },
     iconDelete: {
-      position: 'absolute',
-      [isRtl ? 'left' : 'right']: 70,
+      position: "absolute",
+      [isRtl ? "left" : "right"]: 70,
       top: middleHeight - 7,
       height: 14,
       width: 14
     },
     iconDeleteDefault: {
-      tintColor: 'grey'
+      tintColor: "grey"
     },
     cancelButton: {
-      justifyContent: 'center',
-      alignItems: isRtl ? 'flex-end' : 'flex-start',
-      backgroundColor: 'transparent',
+      justifyContent: "center",
+      alignItems: isRtl ? "flex-end" : "flex-start",
+      backgroundColor: "transparent",
       width: 60,
       height: 50
     },
     cancelButtonText: {
       fontSize: 14,
-      color: '#fff'
+      color: "#fff"
     }
   };
-}
+};
 
 /**
  * Props
@@ -504,17 +523,20 @@ Search.propTypes = {
     ViewPropTypes.style,
     Text.propTypes.style
   ]),
-  direction: PropTypes.oneOf(['ltr', 'rtl']),
+  direction: PropTypes.oneOf(["ltr", "rtl"]),
   cancelButtonStyle: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.object,
     ViewPropTypes.style,
-    Text.propTypes.style,
+    Text.propTypes.style
   ]),
   onLayout: PropTypes.func,
   cancelButtonTextStyle: Text.propTypes.style,
 
-  cancelButtonViewStyle: PropTypes.oneOfType([PropTypes.object, ViewPropTypes.style]),
+  cancelButtonViewStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    ViewPropTypes.style
+  ]),
 
   /**
    * text input
@@ -526,7 +548,6 @@ Search.propTypes = {
   iconSearch: PropTypes.object,
   returnKeyType: PropTypes.string,
   keyboardType: PropTypes.string,
-  keyboardAppearance: PropTypes.string,
   autoCapitalize: PropTypes.string,
   inputHeight: PropTypes.number,
   inputBorderRadius: PropTypes.number,
@@ -560,7 +581,7 @@ Search.propTypes = {
 };
 
 Search.defaultProps = {
-  defaultValue: '',
+  defaultValue: "",
   editable: true,
   blurOnSubmit: true,
   keyboardShouldPersist: false,
@@ -571,13 +592,13 @@ Search.defaultProps = {
   shadowOffsetWidth: 0,
   shadowOffsetHeightCollapsed: 2,
   shadowOffsetHeightExpanded: 4,
-  shadowColor: '#000',
+  shadowColor: "#000",
   shadowOpacityCollapsed: 0.12,
   shadowOpacityExpanded: 0.24,
   shadowRadius: 4,
   shadowVisible: false,
   useClearButton: true,
-  direction: 'ltr',
+  direction: "ltr"
 };
 
 export default Search;
